@@ -4,24 +4,55 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    //  RigidBody型でメンバ変数を宣言
+    Rigidbody rigidBody;
+
+    public float speed;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        //  ゲームオブジェクトからアタッチされている
+        //  RigidBodyコンポーネントを取得する
+        rigidBody = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        //  左右キーの入力を受け取る
+        //  左(-1.0)～右(1.0)の範囲で取得
+        float x = Input.GetAxis("Horizontal");
+
+        //  上下キーの入力を受け取る
+        //  左(-1.0)～右(1.0)の範囲で取得
+        float z = Input.GetAxis("Vertical");
+
+        rigidBody.AddForce(x * speed, 0, z * speed);
     }
 
-    public void OnTriggerEnter(Collider other)
+    //  衝突開始時に呼ばれる
+    public void OnCollisionEnter(Collision collision)
     {
-        if(other.tag == "Item") {
-            Debug.Log("アイテムに衝突！");
+        if (collision.gameObject.tag == "Item") {
+            Destroy(collision.gameObject);
+            Debug.Log($"衝突開始:{collision.gameObject}");
+        }
+    }
 
-            Destroy(other.gameObject);
+    //  衝突中に呼ばれる
+    public void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.tag == "Item") {
+            Debug.Log($"衝突中:{collision.gameObject}");
+        }
+    }
+
+    //  衝突終了時に呼ばれる
+    public void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.tag == "Item") {
+            Debug.Log($"衝突終了:{collision.gameObject}");
         }
     }
 }
