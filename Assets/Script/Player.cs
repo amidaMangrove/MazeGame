@@ -52,7 +52,7 @@ public class Player : MonoBehaviour
             Destroy(collision.gameObject);
 
             //  オーディオを再生する
-            //audioSource.Play();
+            audioSource.Play();
             Debug.Log($"衝突開始:{collision.gameObject}");
         }
     }
