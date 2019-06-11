@@ -9,12 +9,21 @@ public class Player : MonoBehaviour
 
     public float speed;
 
+    public GameObject obj;
+
+    //  AudioSource型でメンバ変数を宣言
+    AudioSource audioSource;
+
     // Start is called before the first frame update
     void Start()
     {
         //  ゲームオブジェクトからアタッチされている
         //  RigidBodyコンポーネントを取得する
         rigidBody = GetComponent<Rigidbody>();
+
+        //  オーディオソースのコンポーネントを取得する
+        audioSource = GetComponent<AudioSource>();
+
     }
 
     // Update is called once per frame
@@ -35,7 +44,15 @@ public class Player : MonoBehaviour
     public void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Item") {
+
+            //  ゲームオブジェクトを生成する
+            Instantiate(obj, collision.transform.position, Quaternion.identity);
+
+            //  ゲームオブジェクトを破棄する
             Destroy(collision.gameObject);
+
+            //  オーディオを再生する
+            //audioSource.Play();
             Debug.Log($"衝突開始:{collision.gameObject}");
         }
     }
