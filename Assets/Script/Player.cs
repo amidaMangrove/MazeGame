@@ -14,6 +14,11 @@ public class Player : MonoBehaviour
     //  AudioSource型でメンバ変数を宣言
     AudioSource audioSource;
 
+    //  スコア
+    int score = 0;
+
+    public ScoreView scoreView;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -53,6 +58,12 @@ public class Player : MonoBehaviour
 
             //  オーディオを再生する
             audioSource.Play();
+
+            //  スコアを加算
+            score++;
+
+            //  画面のスコアを更新
+            scoreView.UpdateScore(score);
             Debug.Log($"衝突開始:{collision.gameObject}");
         }
     }
@@ -71,5 +82,12 @@ public class Player : MonoBehaviour
         if (collision.gameObject.tag == "Item") {
             Debug.Log($"衝突終了:{collision.gameObject}");
         }
+    }
+
+    // スライダーの値が変更したら呼ばれるメソッド
+    //  valueにはスライダーの値が入ってくる
+    public void ChangeScale(float value)
+    {
+        transform.localScale = new Vector3(value, value, value);
     }
 }
