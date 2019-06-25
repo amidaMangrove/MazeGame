@@ -64,6 +64,7 @@ public class Player : MonoBehaviour
 
             //  画面のスコアを更新
             scoreView.UpdateScore(score);
+
             Debug.Log($"衝突開始:{collision.gameObject}");
         }
     }
