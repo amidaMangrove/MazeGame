@@ -19,6 +19,9 @@ public class Player : MonoBehaviour
 
     public ScoreView scoreView;
 
+    //  ゲームオーバーのUIオブジェクト
+    public GameObject gameOver;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -43,6 +46,10 @@ public class Player : MonoBehaviour
         float z = Input.GetAxis("Vertical");
 
         rigidBody.AddForce(x * speed, 0, z * speed);
+
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            rigidBody.AddForce(new Vector3(0,1,0) * 10, ForceMode.VelocityChange);
+        }
     }
 
     //  衝突開始時に呼ばれる
@@ -66,6 +73,12 @@ public class Player : MonoBehaviour
             scoreView.UpdateScore(score);
 
             Debug.Log($"衝突開始:{collision.gameObject}");
+        }
+
+        //  敵に衝突した場合
+        if (collision.gameObject.tag == "Enemy") {
+            Destroy(this.gameObject);
+            gameOver.SetActive(true);
         }
     }
 
