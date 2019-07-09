@@ -22,6 +22,9 @@ public class Player : MonoBehaviour
     //  ゲームオーバーのUIオブジェクト
     public GameObject gameOver;
 
+    //  フリーカメラを使用した移動
+    public bool isFreeLook;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -36,7 +39,7 @@ public class Player : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
+    {     
         //  左右キーの入力を受け取る
         //  左(-1.0)～右(1.0)の範囲で取得
         float x = Input.GetAxis("Horizontal");
@@ -45,7 +48,26 @@ public class Player : MonoBehaviour
         //  左(-1.0)～右(1.0)の範囲で取得
         float z = Input.GetAxis("Vertical");
 
-        rigidBody.AddForce(x * speed, 0, z * speed);
+
+        if (isFreeLook) {
+            // カメラの方向に対して平面方向の値を取得
+            Vector3 forward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
+            Vector3 right = Vector3.Scale(Camera.main.transform.right, new Vector3(1, 0, 1)).normalized;
+
+            //  入力値を掛け合わせる
+            forward = forward * z;
+            right = right * x;
+
+            //  2つのベクトルを加算し正規化
+            var force = (forward + right).normalized;
+
+            //  移動させる
+            rigidBody.AddForce(force * speed);
+        }
+        else {
+
+            rigidBody.AddForce(x * speed, 0, z * speed);
+        }
 
         if (Input.GetKeyDown(KeyCode.Space)) {
             rigidBody.AddForce(new Vector3(0,1,0) * 10, ForceMode.VelocityChange);
